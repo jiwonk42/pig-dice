@@ -1,44 +1,60 @@
-var sump1 = 0;
-var sump2 = 0;
-var number1;
-var number2;
+var currentRoll = 0;
+var totalRoll = 0;
+var random = 0;
 
-var numGen = function() {
-  var random = 6 * Math.random();
-  var rounded = Math.round(random);
-  number1 = rounded;
-  number2 = rounded;
-  if (rounded > 0) {
-    return rounded;
-  }
+var placeHolder = 0;
+
+
+function Player(currentRoll, totalRoll) {
+  this.currentRoll = currentRoll;
+  this.totalRoll = totalRoll;
 }
 
-var sum1 = function() {
-  sump1 = sump1 + numGen();
-  return sump1;
+Player.prototype.processingCurrent = function() {
+  if (random > 1) {
+   currentRoll += random;
+
+ } else {
+   alert("You've rolled 1")
+   placeHolder = currentRoll;
+   currentRoll = 0;
+ }
 }
 
-var sum2 = function() {
-  sump2 = sump2 + numGen();
-  return sump2;
+Player.prototype.processingTotal = function() {
+  if (random > 1) {
+   totalRoll += random;
+
+ } else {
+   totalRoll -= placeHolder;
+
+ }
 }
+
 
 $(function() {
 
-  $("#player1").submit(function(event) {
+  $(".player1").submit(function(event) {
     event.preventDefault();
 
-    $("#output1").text(sum1());
-    $("#rollTotal ul").append("<li>" + number1 + "</li>");
-    number1 = 0;
-  });
+    random = Math.floor(Math.random() * 6 + 1);
+    var player1 = new Player(currentRoll, totalRoll);
+
+    player1.processingCurrent();
+    player1.processingTotal();
+
+      $("#currentRoll").text(currentRoll);
+
+    });
+
 
   $("#player2").submit(function(event) {
     event.preventDefault();
 
-    $("#output2").text(sum2());
-    $("#rollTotal2 ul").append("<li>" + number2 + "</li>");
-    number2 = 0;
   });
 
+  $("#hold1" ).click(function() {
+    $("#totalRoll").text(totalRoll);
+    currentRoll = 0;
+  });
 });
